@@ -1,0 +1,99 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{\vspace{-1.5cm}RSS Practical -  Milestone 1 \\ Group 9} % Title of the assignment
+
+\author{Afzal Komal \texttt{s1830374@ed.ac.uk}\\ 
+		Vison\`a Giovanni \texttt{s1883358@ed.ac.uk} \\
+		Zixiang Lu \texttt{s1818027@ed.ac.uk}} % Author name and email address
+
+%\date{University of Inaba --- \today} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+
+%\newgeometry{top=0.3in}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section*{Structure of the robot} 
+
+The current iteration of our robot is a 4 wheeled robot with a 2 module structure. 
+The upper section encases the boards, the power sources and the antenna. The bottom part comprises the wheels, the 2 driving NXT motors, the gear trains and the sensors that need to be located in the lower section of the robot. 
+\newline
+
+The first iteration of the robot used a 3 wheel setup, with a free turning back wheel. This setup proved to be quite unstable, and would not move straight without swaying.
+
+The second iteration used a 4 wheels setup with 2 wheels directly attached to the motors. This configuration of the robot moved quite well in a straight line, but turning proved to be challenging, as the 2 passive back wheels would cause considerable friction. We deemed this choice to unreliable to be used as the design of our robot. 
+
+For the third attempt we added a gear train on each side of the robot to allow smoother turning, which proved to be quite successful. The issue with this design lied in the gear ratio of 1 between the motors and the wheels. This caused the robot to move very fast, which introduced many sources of errors such as considerable overshoot when stopping the robot and other issues regarding obstacle avoidance.
+
+The final and current design introduced 2 simple modifications. The first, a different gear ratio of 5 between the NXT motors and the wheels, slowed the robot down considerably and allowed a better use of the Hall effect sensor for odometry and control. The second, a support structure that loads a portion of the weight of the robot on the outer part of the wheels, prevented the bending of the wheel axles and improved significantly the reliability of the robot.
+
+\section*{Camera}
+
+The Pi Camera is located in the front of the robot. It is not currently used, but we intend to employ it for localization purposes. Our plan is to add feature recognition logic to the robot's software in order to locate the landmarks of the map. The tool to achieve this will be the OpenCV library.
+
+As this is a computationally intensive task, we will need to bring the robot to a halt before performing any kind of image analysis.
+
+Our early tests showed that the simultaneous load of the control logic and the continuous use of the camera could cause the Raspberry Pi to crash.
+
+\section*{Sensors setup} 
+
+The sensors currently in use on the robot are:
+
+\begin{itemize}
+\item 2 IR sensors. These sensors are the main resource for obstacle avoidance. Their response curve proved to be ideal for this task (plotted in Figure \ref{fig:IR}).
+\item 3 light sensors. Two of them are located in the front of the robot, one in the back part. These sensors are used to detect the POI. The rear sensor is paired with the lightbulb to make up for the lack of light underneath the robot, as its structure does not leave much space between the bottom part and the floor.
+\item Hall effect sensor. This sensor is connected to the gear train on the right side of the robot, with a gear ratio of 5 with respect to the wheels. This ratio allows for finer measurements and a consistent use of odometry (Figure \ref{fig:odometry}).
+\end{itemize}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{.5\textwidth}
+\includegraphics[width=1\linewidth]{IR}
+\caption{Characteristic of the IR sensor.}
+\label{fig:IR}
+%\captionof{fig:IR}{Characteristic of the IR sensor}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{odometry}
+  %\captionof{figure}{Another figure}
+  \caption{Test of the Hall effect sensor for odometry.}
+  \label{fig:odometry}
+\end{minipage}
+\label{fig:CKScan1}
+\end{figure}
+ 
+
+\section*{Software logic}
+
+The current toddler class of the robot uses an internal status and instruction queue to manage the control flow of the robot. With this setup it is quite simple to control for how long to perform a certain action (e.g. turning), as well as ensuring that the next actions are executed in a specific order.
+
+ Furthermore, it is easy to optimize the use of resources such as turning off the camera stream while moving or ignoring the IR sensor measurements while pointing the antenna. 
+
+\section*{Antenna}
+
+For the data stream task, we chose to rely on the orientation of the robot to properly align the horizontal direction of the antenna towards the target. Introducing another joint to rotate the antenna with respect to the robot would have introduced a significant source of error and complicated the task greatly. 
+
+The vertical angle of the antenna is managed with the servo motor, which allows for fine movements and simple controls, which would have been impossible with the other motors available.
+
+
+
+\end{document}
