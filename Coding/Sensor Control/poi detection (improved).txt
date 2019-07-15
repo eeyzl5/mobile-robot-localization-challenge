@@ -1,0 +1,63 @@
+
+def poi_init():
+    self.s1 = 'poi_false'
+    self.flag = 'poi_false'
+
+
+
+def poi_detect():
+
+    ir_left = self.getSensors()[0]
+    ir_right = self.getSensors()[1]
+
+    if ir_left <50 and ir_right <50:
+        self.flag = 'poi_false'
+    if ir_left <50 and ir_right >=50:
+        self.flag = 'poi_right'
+    if ir_left >=50 and ir_right <50:
+        self.flag = 'poi_left'
+    if ir_left >=50 and ir_right >=50:
+        self.flag = 'poi_true'
+
+    self.s2 = self.s1
+    self.s1 = self.flag
+
+
+    if self.s2 == 'poi_true':
+        self.mc.setMotor(2,100)
+        self.mc.setMotor(4,100)
+    if self.s2 == 'poi_false':
+        if self.s1 == 'poi_false':
+            self.mc.setMotor(2,100)
+            self.mc.setMotor(4,100)
+        if self.s1 == 'poi_right':
+            self.mc.setMotor(2,-100)
+            self.mc.setMotor(4,100)
+        if self.s1 == 'poi_left':
+            self.mc.setMotor(2,100)
+            self.mc.setMotor(4,-100)
+        if self.s1 == 'poi_true':
+            self.mc.stopMotors()
+            time.sleep(1)
+    if self.s2 == 'poi_right' and self.s1 != 'poi_true':
+        self.mc.setMotor(2,-100)
+        self.mc.setMotor(4,100)
+    if self.s2 == 'poi_left' and self.s1 != 'poi_true':
+        self.mc.setMotor(2,100)
+        self.mc.setMotor(4,-100)
+    if self.s2 == 'poi_right' and self.s1 == 'poi_true':
+        self.mc.stopMotors()
+        time.sleep(1)
+    if self.s2 == 'poi_left' and self.s1 == 'poi_true':
+        self.mc.stopMotors()
+        time.sleep(1)
+
+    
+
+
+
+
+
+
+
+ 
